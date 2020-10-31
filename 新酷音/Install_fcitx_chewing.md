@@ -6,15 +6,18 @@ sudo apt-get install fcitx fcitx-chewing
 ```
 
 2. 調整fcitx為預設輸入法
+
 **System Setting** > **Language Support** > **Language** > **Keyboard input method system** > Select **fcitx**
 
 3. 調整個程式獨立輸入法
+
 **System Settings** > **Text Entry** > Select **Allow different sources for each application**
 
 4. 取消選字框
+
 右上輸入法圖示 > **Configure** > **Global Config** > **Show Advence Option** > **Appearance** > Select **Do not show input window if there is only preedit string**
 
-5. 變更輸入法圖示![](https://raw.githubusercontent.com/zhl017/omiyage/main/%E6%96%B0%E9%85%B7%E9%9F%B3/fcitx-chewing.png)
+5. 變更輸入法圖示![](https://raw.githubusercontent.com/zhl017/omiyage/main/%E6%96%B0%E9%85%B7%E9%9F%B3/fcitx-chewing.png) (右鍵另存圖片)
 ```
  sudo cp fcitx-chewing.png /usr/share/icons/hicolor/48x48/apps/fcitx-chewing.png
 ```
