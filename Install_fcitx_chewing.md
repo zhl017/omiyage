@@ -1,5 +1,4 @@
 # Install fcitx + chewing 新酷音輸入法
-> [name=zhl017][time=Sat, Oct 31, 2020 2:25 PM]
 ## Installation
 1. 安裝框架
 ```
