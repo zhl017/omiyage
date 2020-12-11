@@ -8,6 +8,9 @@ After downloading Anaconda, go to the directory in located download file and ent
     $ bash Anaconda2-x.x.x-Linux-x86_64.sh
 
 Key `yes` `no` `no` to complete installed Anaconda.
+![](https://github.com/zhl017/omiyage/blob/main/Anaconda/anaconda_1.png)
+![](https://github.com/zhl017/omiyage/blob/main/Anaconda/anaconda_2.png)
+![](https://github.com/zhl017/omiyage/blob/main/Anaconda/anaconda_3.png)
 
 Set the default Anaconda path in the `.bashrc` file.
 
