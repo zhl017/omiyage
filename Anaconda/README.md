@@ -52,7 +52,7 @@ This tutorial is used python 2.7(CPU only). If you want to use another python ve
         pip uninstall bleach
         pip install bleach==1.5.0
         
-* Import Numpy error.
+* Import `numpy` error.
 
         ImportError: Something is wrong with the numpy installation. While importing we detected an older version of numpy
         
@@ -61,3 +61,6 @@ This tutorial is used python 2.7(CPU only). If you want to use another python ve
         pip uninstall numpy (two times)
         pip install numpy
     
+* Import `pyqtgraph` error.
+        
+        pip install pyqtgraph
