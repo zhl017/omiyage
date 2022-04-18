@@ -90,5 +90,7 @@ sh -c "echo \"export TURTLEBOT3_MODEL=burger\" >> ~/.bashrc"
 
 source $HOME/.bashrc
 
+sudo snap install --classic code
+
 echo "[Complete!!!]"
 exit 0
