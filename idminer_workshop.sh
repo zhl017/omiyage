@@ -115,6 +115,15 @@ sudo make
 sudo make install
 cd ~
 rm opencv.zip opencv_contrib.zip 
+sudo su
+touch /etc/ld.so.conf.d/opencv.conf
+sh -c "echo \"/usr/local/lib\" >> /etc/ld.so.conf.d/opencv.conf"
+ldconfig
+sh -c "echo \"PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig\" >> /etc/bash.bashrc"
+sh -c "echo \"export PKG_CONFIG_PATH\" >> /etc/bash.bashrc"
+exit
+source /etc/bash.bashrc
+sudo updatedb
 
 source $HOME/.bashrc
 echo "[Complete!!!]"
