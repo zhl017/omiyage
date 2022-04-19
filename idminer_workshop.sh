@@ -88,9 +88,34 @@ sh -c "echo \"export ROS_MASTER_URI=http://localhost:11311\" >> ~/.bashrc"
 sh -c "echo \"export ROS_HOSTNAME=localhost\" >> ~/.bashrc"
 sh -c "echo \"export TURTLEBOT3_MODEL=burger\" >> ~/.bashrc"
 
-source $HOME/.bashrc
-
+echo ""
+echo "[Note] Install Visual Code"
+echo ""
 sudo snap install --classic code
 
+echo ""
+echo "[Note] Update opencv from 4.2.0 to 4.5.0"
+echo ""
+
+sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev build-essential mlocate
+sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
+sudo apt update
+sudo apt install libjasper1 libjasper-dev
+cd ~
+wget -O opencv.zip https://github.com/opencv/opencv/archive/4.5.0.zip
+wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.5.0.zip
+unzip opencv.zip
+unzip opencv_contrib.zip
+mv opencv-4.5.0 opencv
+mv opencv_contrib-4.5.0 opencv_contrib
+mv opencv_contrib opencv
+cd ~/opencv && mkdir build && cd build
+cmake ..
+sudo make
+sudo make install
+cd ~
+rm opencv.zip opencv_contrib.zip 
+
+source $HOME/.bashrc
 echo "[Complete!!!]"
 exit 0
