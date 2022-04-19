@@ -89,7 +89,19 @@ sh -c "echo \"export ROS_HOSTNAME=localhost\" >> ~/.bashrc"
 sh -c "echo \"export TURTLEBOT3_MODEL=burger\" >> ~/.bashrc"
 
 echo ""
-echo "[Note] Install Visual Code"
+echo "[Note] Install Dependent ROS Packages"
+echo ""
+sudo apt-get install ros-noetic-joy ros-noetic-teleop-twist-joy \
+  ros-noetic-teleop-twist-keyboard ros-noetic-laser-proc \
+  ros-noetic-rgbd-launch ros-noetic-rosserial-arduino \
+  ros-noetic-rosserial-python ros-noetic-rosserial-client \
+  ros-noetic-rosserial-msgs ros-noetic-amcl ros-noetic-map-server \
+  ros-noetic-move-base ros-noetic-urdf ros-noetic-xacro \
+  ros-noetic-compressed-image-transport ros-noetic-rqt* ros-noetic-rviz \
+  ros-noetic-gmapping ros-noetic-navigation ros-noetic-interactive-markers
+
+echo ""
+echo "[Note] Install Visual Studio Code"
 echo ""
 sudo snap install --classic code
 
@@ -114,14 +126,13 @@ cmake ..
 sudo make
 sudo make install
 cd ~
-rm opencv.zip opencv_contrib.zip 
-sudo su
-touch /etc/ld.so.conf.d/opencv.conf
-sh -c "echo \"/usr/local/lib\" >> /etc/ld.so.conf.d/opencv.conf"
-ldconfig
-sh -c "echo \"PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig\" >> /etc/bash.bashrc"
-sh -c "echo \"export PKG_CONFIG_PATH\" >> /etc/bash.bashrc"
-exit
+rm opencv.zip opencv_contrib.zip
+
+sudo touch /etc/ld.so.conf.d/opencv.conf
+sudo sh -c "echo \"/usr/local/lib\" >> /etc/ld.so.conf.d/opencv.conf"
+sudo ldconfig
+sudo sh -c "echo \"PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig\" >> /etc/bash.bashrc"
+sudo sh -c "echo \"export PKG_CONFIG_PATH\" >> /etc/bash.bashrc"
 source /etc/bash.bashrc
 sudo updatedb
 
