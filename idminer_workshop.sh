@@ -24,7 +24,7 @@ echo "[Update the package lists]"
 sudo apt update -y
 
 echo "[Install build environment, the chrony, ntpdate and set the ntpdate]"
-sudo apt install -y chrony ntpdate curl build-essential net-tools
+sudo apt install -y chrony ntpdate curl build-essential net-tools nmap
 sudo ntpdate ntp.ubuntu.com
 
 echo "[Add the ROS repository]"
