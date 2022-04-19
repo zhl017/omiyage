@@ -2,6 +2,10 @@
 # Apache License 2.0
 # Copyright (c) 2020, ROBOTIS CO., LTD.
 
+# 7 ~ 105     ROS INSTALL
+# 107 ~ 113   VSCode INSTALL
+# 115 ~ 148   openCV UPDATE
+
 echo ""
 echo "[Note] Target OS version  >>> Ubuntu 20.04.x (Focal Fossa) or Linux Mint 21.x"
 echo "[Note] Target ROS version >>> ROS Noetic Ninjemys"
@@ -104,6 +108,9 @@ echo ""
 echo "[Note] Install Visual Studio Code"
 echo ""
 sudo snap install --classic code
+echo ""
+echo "[Note] VSCode install complete"
+echo ""
 
 echo ""
 echo "[Note] Update opencv from 4.2.0 to 4.5.0"
@@ -135,6 +142,10 @@ sudo sh -c "echo \"PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig\" >
 sudo sh -c "echo \"export PKG_CONFIG_PATH\" >> /etc/bash.bashrc"
 source /etc/bash.bashrc
 sudo updatedb
+
+echo ""
+echo "[Note] Update opencv complete"
+echo ""
 
 source $HOME/.bashrc
 echo "[Complete!!!]"
