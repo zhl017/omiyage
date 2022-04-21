@@ -77,7 +77,7 @@ cd $HOME/$name_catkin_workspace
 catkin_make
 
 echo "[Set the ROS evironment]"
-sh -c "echo \"alias eb='nano ~/.bashrc'\" >> ~/.bashrc"
+sh -c "echo \"alias nb='nano ~/.bashrc'\" >> ~/.bashrc"
 sh -c "echo \"alias sb='source ~/.bashrc'\" >> ~/.bashrc"
 sh -c "echo \"alias gs='git status'\" >> ~/.bashrc"
 sh -c "echo \"alias gp='git pull'\" >> ~/.bashrc"
@@ -88,14 +88,15 @@ sh -c "echo \"alias cm='cd ~/$name_catkin_workspace && catkin_make'\" >> ~/.bash
 sh -c "echo \"source /opt/ros/$name_ros_version/setup.bash\" >> ~/.bashrc"
 sh -c "echo \"source ~/$name_catkin_workspace/devel/setup.bash\" >> ~/.bashrc"
 
-sh -c "echo \"export ROS_MASTER_URI=http://localhost:11311\" >> ~/.bashrc"
-sh -c "echo \"export ROS_HOSTNAME=localhost\" >> ~/.bashrc"
+sh -c "echo \"export MASTER_IP=localhost\" >> ~/.bashrc"
+sh -c "echo \"export ROS_MASTER_URI=http://$MASTER_IP:11311\" >> ~/.bashrc"
+sh -c "echo \"export ROS_HOSTNAME=MASTER_IP\" >> ~/.bashrc"
 sh -c "echo \"export TURTLEBOT3_MODEL=burger\" >> ~/.bashrc"
 
 echo ""
 echo "[Note] Install Dependent ROS Packages"
 echo ""
-sudo apt-get install ros-noetic-joy ros-noetic-teleop-twist-joy \
+sudo apt-get install -y ros-noetic-joy ros-noetic-teleop-twist-joy \
   ros-noetic-teleop-twist-keyboard ros-noetic-laser-proc \
   ros-noetic-rgbd-launch ros-noetic-rosserial-arduino \
   ros-noetic-rosserial-python ros-noetic-rosserial-client \
@@ -116,10 +117,10 @@ echo ""
 echo "[Note] Update opencv from 4.2.0 to 4.5.0"
 echo ""
 
-sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev build-essential mlocate
+sudo apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev build-essential mlocate
 sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
 sudo apt update
-sudo apt install libjasper1 libjasper-dev
+sudo apt install -y libjasper1 libjasper-dev
 cd ~
 wget -O opencv.zip https://github.com/opencv/opencv/archive/4.5.0.zip
 wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.5.0.zip
