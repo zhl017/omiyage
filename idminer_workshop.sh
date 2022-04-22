@@ -138,7 +138,7 @@ rm opencv.zip opencv_contrib.zip
 
 sudo touch /etc/ld.so.conf.d/opencv.conf
 sudo sh -c "echo \"/usr/local/lib\" >> /etc/ld.so.conf.d/opencv.conf"
-sudo ldconfig
+sudo ldconfig -y
 sudo sh -c "echo \"PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig\" >> /etc/bash.bashrc"
 sudo sh -c "echo \"export PKG_CONFIG_PATH\" >> /etc/bash.bashrc"
 source /etc/bash.bashrc
