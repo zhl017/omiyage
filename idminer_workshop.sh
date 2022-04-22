@@ -119,7 +119,7 @@ echo ""
 
 sudo apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev build-essential mlocate
 sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
-sudo apt update
+sudo apt update -y
 sudo apt install -y libjasper1 libjasper-dev
 cd ~
 wget -O opencv.zip https://github.com/opencv/opencv/archive/4.5.0.zip
@@ -142,7 +142,7 @@ sudo ldconfig
 sudo sh -c "echo \"PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig\" >> /etc/bash.bashrc"
 sudo sh -c "echo \"export PKG_CONFIG_PATH\" >> /etc/bash.bashrc"
 source /etc/bash.bashrc
-sudo updatedb
+sudo updatedb -y
 
 echo ""
 echo "[Note] Update opencv complete"
