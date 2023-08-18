@@ -8,6 +8,6 @@
 
 - 下載[Ubuntu 20.04 vmware映像檔](https://mega.nz/file/BJFBjB5D#GQhEiu3aQKKjv4TdY5lJGS0zsH7EZh_bQ5YAXnCGkwU)。
 
-- 教學影片
+- 教學影片(待更新)
 
-  [![IMAGE ALT TEXT](https://emanual.robotis.com/assets/images/platform/turtlebot3/overview/turtlebot3_with_logo.png)](https://www.youtube.com/watch?v=A_EuQbj-GwQ)
+  [![IMAGE ALT TEXT](https://emanual.robotis.com/assets/images/platform/turtlebot3/overview/turtlebot3_with_logo.png)]()
