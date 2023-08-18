@@ -2,6 +2,9 @@
 # Apache License 2.0
 # Copyright (c) 2020, ROBOTIS CO., LTD.
 
+# This is for fira robotports autorace workshop
+# IDMINER
+
 # 7 ~ 105     ROS INSTALL
 # 107 ~ 113   VSCode INSTALL
 # 115 ~ 148   openCV UPDATE
