@@ -10,4 +10,4 @@
 
 - 教學影片(待更新)
 
-  [![IMAGE ALT TEXT](https://emanual.robotis.com/assets/images/platform/turtlebot3/overview/turtlebot3_with_logo.png)]()
+  [![IMAGE ALT TEXT](https://emanual.robotis.com/assets/images/platform/turtlebot3/overview/turtlebot3_with_logo.png)](https://www.youtube.com/watch?v=lgIQuP1-zpw)
