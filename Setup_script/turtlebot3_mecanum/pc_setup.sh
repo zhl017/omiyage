@@ -21,3 +21,5 @@ git clone -b mecanum-devel https://github.com/zhl017/turtlebot3_idm_custom
 git clone https://github.com/zhl017/turtlebot3_msgs_idm_custom
 cd $HOME/$name_catkin_workspace
 catkin_make
+echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
