@@ -25,3 +25,5 @@ cd $HOME/$name_catkin_workspace/src/turtlebot3_idm_custom
 sudo rm -r turtlebot3_description/ turtlebot3_teleop/ turtlebot3_navigation/ turtlebot3_slam/ turtlebot3_example/
 cd $HOME/$name_catkin_workspace
 catkin_make -j1
+echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
