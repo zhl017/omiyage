@@ -25,3 +25,5 @@ cd $HOME/$name_catkin_workspace/src/turtlebot3_fet
 sudo rm -r fet_description/ fet_teleop/ fet_navigation/ fet_slam/ fet_example/
 cd $HOME/$name_catkin_workspace
 catkin_make -j1
+echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+source ~/.bashrc
