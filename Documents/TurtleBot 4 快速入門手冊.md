@@ -1,4 +1,4 @@
-# TurtleBot4 快速入門使用手冊
+# TurtleBot4 快速入門手冊
 
 ![](https://turtlebot.github.io/turtlebot4-user-manual/media/TurtleBot4.jpg)
 
