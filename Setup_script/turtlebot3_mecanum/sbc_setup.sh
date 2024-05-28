@@ -13,8 +13,8 @@ name_ros_version=${name_ros_version:="noetic"}
 name_catkin_workspace=${name_catkin_workspace:="catkin_ws"}
 
 echo "[Make the catkin workspace and test the catkin_make]"
-sudo apt remove ros-noetic-turtlebot3-msgs 
-sudo apt remove ros-noetic-turtlebot3
+sudo apt remove ros-noetic-turtlebot3-msgs -y
+sudo apt remove ros-noetic-turtlebot3 -y
 sudo rm -r $HOME/$name_catkin_workspace
 mkdir -p $HOME/$name_catkin_workspace/src
 cd $HOME/$name_catkin_workspace/src
