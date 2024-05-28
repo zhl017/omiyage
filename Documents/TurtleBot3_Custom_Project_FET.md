@@ -1,4 +1,4 @@
-# TurtleBot3 Customization : FET  
+# TurtleBot3 Custom Project : FET  
 <img src="https://github.com/ROBOTIS-GIT/emanual/blob/master/assets/images/platform/turtlebot3/logo_turtlebot3.png" width="300">
 
 ## 規格
