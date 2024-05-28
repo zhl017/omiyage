@@ -1,4 +1,4 @@
-# TurtleBot3 Custom Project : TurtleBot3 Mecanum  
+# TurtleBot3 Custom Project : TurtleBot3 Mecanum With Open Manipulator
 <img src="https://github.com/ROBOTIS-GIT/emanual/blob/master/assets/images/platform/turtlebot3/logo_turtlebot3.png" width="300">
 
 ## 規格
