@@ -1,0 +1,234 @@
+#!/usr/bin/env python3
+import copy, os, subprocess, shlex, re, sys, yaml
+from enum import Enum
+
+class WifiOptions(str, Enum):
+    SSID = 'SSID'
+    PASSWORD = 'PASSWORD'
+    REG_DOMAIN = 'REG_DOMAIN'
+    WIFI_MODE = 'WIFI_MODE'
+    BAND = 'BAND'
+    IP = 'IP'
+    DHCP = 'DHCP'
+
+    def __str__(self):
+        return f'{self.value}'
+
+class Conf():
+    netplan_dir = '/etc/netplan/'
+
+    default_wifi_conf = {
+        WifiOptions.SSID: 'Turtlebot3',
+        WifiOptions.PASSWORD: 'turtlebot',
+        WifiOptions.REG_DOMAIN: 'TW',
+        WifiOptions.WIFI_MODE: 'Access Point',
+        WifiOptions.BAND: '5G',
+        WifiOptions.IP: None,
+        WifiOptions.DHCP: True,
+    }
+
+    def __init__(self) -> None:
+        self.netplan_wifis_file = os.path.join(self.netplan_dir, '50-cloud-init.yaml')
+        self.wifi_conf = copy.deepcopy(self.default_wifi_conf)
+        subprocess.run(shlex.split('mkdir -p /tmp' + self.netplan_dir))
+
+        self.read()
+
+    def get(self, conf):
+        if isinstance(conf, WifiOptions):
+            return self.wifi_conf.get(conf)
+        return None
+    
+    def set(self, conf, value):
+        if isinstance(conf, WifiOptions):
+            self.wifi_conf[conf] = value
+
+    def apply_default(self, conf):
+        if conf == self.wifi_conf:
+            self.wifi_conf = copy.deepcopy(self.default_wifi_conf)
+
+    def read(self):
+        try:
+            self.read_wifi()
+        except Exception as err:
+            print(f'Error reading : {err}')
+            sys.exit(1)
+
+    def write(self):
+        try:
+            self.write_wifi()
+        except Exception as err:
+            print(f'Error writing : {err}')
+            sys.exit(1)
+
+    def read_wifi(self):
+        try:
+            netplan = yaml.load(open(self.netplan_wifis_file, 'r'), yaml.SafeLoader)
+
+            wlan0 = netplan['network']['wifis']['wlan0']
+
+            self.set(WifiOptions.SSID, list(wlan0['access-points'])[0])
+            ssid_settings = wlan0['access-points'][self.get(WifiOptions.SSID)]
+
+            self.set(WifiOptions.PASSWORD, ssid_settings.get('password'))
+
+            if wlan0.get('addresses'):
+                self.set(WifiOptions.IP, wlan0['addresses'][0])
+            else:
+                self.set(WifiOptions.IP, None)
+
+            if wlan0.get('dhcp4') is True:
+                self.set(WifiOptions.DHCP, True)
+            else:
+                self.set(WifiOptions.DHCP, False)
+
+            if ssid_settings.get('mode') == 'ap':
+                self.set(WifiOptions.WIFI_MODE, 'Access Point')
+            else:
+                self.set(WifiOptions.WIFI_MODE, 'Client')
+
+            if ssid_settings.get('band'):
+                self.set(WifiOptions.BAND, ssid_settings.get('band'))
+            else:
+                self.set(WifiOptions.BAND, 'Any')
+        except Exception:
+            pass
+
+    def write_wifi(self):
+        ssid = self.get(WifiOptions.SSID)
+        password = self.get(WifiOptions.PASSWORD)
+        dhcp = self.get(WifiOptions.DHCP)
+        wifi_mode = self.get(WifiOptions.WIFI_MODE)
+        band = self.get(WifiOptions.BAND)
+        ip = self.get(WifiOptions.IP)
+
+        wlan0 = {
+            'dhcp4': dhcp,
+            'access-points': {
+                ssid: {}
+            }
+        }
+
+        eth0 = {
+            'dhcp4': False,
+            'dhcp6': False,
+            'optional': True,
+            'addresses': ['192.168.123.1/24']
+        }
+
+        if password is not None:
+            wlan0['access-points'][ssid].update({'password': password})
+
+        if ip is not None:
+            wlan0.update({'addresses': [ip]})
+
+        if wifi_mode == 'Access Point':
+            wlan0['access-points'][ssid].update({'mode': 'ap'})
+
+        if band is not None and band != 'Any':
+            wlan0['access-points'][ssid].update({'band': band})
+
+        netplan = {
+            'network': {
+                'renderer': 'NetworkManager',
+                'version': 2,
+                'ethernets': {
+                    'eth0': eth0,
+                },
+                'wifis': {
+                    'wlan0': wlan0,
+                },
+            }
+        }
+
+        yaml.dump(netplan,
+                  stream=open('/tmp' + self.netplan_wifis_file, 'a'),
+                  Dumper=yaml.SafeDumper,
+                  indent=4,
+                  default_flow_style=False,
+                  default_style=None)
+
+        subprocess.run(shlex.split(
+            'sudo mv /tmp' + self.netplan_wifis_file + ' ' + self.netplan_wifis_file))
+        subprocess.run(shlex.split('sudo netplan apply'))
+
+class WifiSetup():
+    # WiFi Setup -- https://patorjk.com/software/taag/#p=display&v=0&f=Small
+    title = """
+ __      _____ ___ ___   ___ ___ _____ _   _ ___ 
+ \ \    / /_ _| __|_ _| / __| __|_   _| | | | _ \\
+  \ \/\/ / | || _| | |  \__ \ _|  | | | |_| |  _/
+   \_/\_/ |___|_| |___| |___/___| |_|  \___/|_|  
+                                                 
+"""
+    def __init__(self, conf: Conf):
+        self.conf = conf
+
+    def run(self):
+        while True:
+            os.system('clear')
+            print(self.title)
+            print("Current Wi-Fi Settings:")
+            for opt in WifiOptions: 
+                val = self.conf.get(opt)
+                if val is not None:
+                    val_str = f"\033[92m{val}\033[0m"
+                else:
+                    val_str = ""
+                print(f"  {opt.value}: {val_str}")
+
+            print("\nMenu:")
+            print("1) Set SSID")
+            print("2) Set Password")
+            print("3) Toggle Wi-Fi Mode (AP/Client)")
+            print("4) Set Band (2.4G/5G/Any)")
+            print("5) Set IP / DHCP")
+            print("6) Set Default")
+            print("7) Apply and Save")
+            print("8) Exit")
+
+            choice = input("\nSelect option: ").strip()
+            if choice == '1':
+                self.conf.set(WifiOptions.SSID, input("Enter SSID: ").strip())
+            elif choice == '2':
+                self.conf.set(WifiOptions.PASSWORD, input("Enter Password: ").strip())
+            elif choice == '3':
+                mode = 'Access Point' if self.conf.get(WifiOptions.WIFI_MODE) == 'Client' else 'Client'
+                self.conf.set(WifiOptions.WIFI_MODE, mode)
+            elif choice == '4':
+                band = input("Enter Band (2.4G/5G/Any): ").strip()
+                self.conf.set(WifiOptions.BAND, band if band in ['2.4G','5G','Any'] else 'Any')
+            elif choice == '5':
+                use_dhcp = input("Use DHCP? (y/n): ").strip().lower()
+                if use_dhcp == 'y':
+                    self.conf.set(WifiOptions.DHCP, True)
+                    self.conf.set(WifiOptions.IP, None)
+                else:
+                    ip = input("Enter static IP (e.g. 192.168.1.100/24): ").strip()
+                    self.conf.set(WifiOptions.DHCP, False)
+                    self.conf.set(WifiOptions.IP, ip)
+            elif choice == '6':
+                self.conf.set(WifiOptions.SSID, 'Turtlebot3')
+                self.conf.set(WifiOptions.PASSWORD, 'turtlebot')
+                self.conf.set(WifiOptions.REG_DOMAIN, 'TW')
+                self.conf.set(WifiOptions.WIFI_MODE, 'Access Point')
+                self.conf.set(WifiOptions.BAND, '5G')
+                self.conf.set(WifiOptions.IP, None)
+                self.conf.set(WifiOptions.DHCP, True)
+            elif choice == '7':
+                print("Applying settings...")
+                self.conf.write()
+                print("Wi-Fi settings applied!\n")
+            elif choice == '8':
+                break
+            else:
+                print("Invalid option!\n")
+    
+def main():
+    conf = Conf()
+    wifi = WifiSetup(conf)
+    wifi.run()
+
+
+if __name__ == '__main__':
+    main()
