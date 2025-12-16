@@ -104,6 +104,9 @@ class Conf():
 
         wlan0 = {
             'dhcp4': dhcp,
+            'nameservers': {
+                'addresses': ['8.8.8.8', '1.1.1.1']
+            },
             'access-points': {
                 ssid: {}
             }
@@ -141,12 +144,13 @@ class Conf():
             }
         }
 
-        yaml.dump(netplan,
-                  stream=open('/tmp' + self.netplan_wifis_file, 'a'),
-                  Dumper=yaml.SafeDumper,
-                  indent=4,
-                  default_flow_style=False,
-                  default_style=None)
+        yaml.dump(
+            netplan,
+            stream=open('/tmp' + self.netplan_wifis_file, 'w'),
+            Dumper=yaml.SafeDumper,
+            indent=4,
+            default_flow_style=False,
+        )
 
         subprocess.run(shlex.split(
             'sudo mv /tmp' + self.netplan_wifis_file + ' ' + self.netplan_wifis_file))
@@ -231,5 +235,4 @@ def main():
 
 
 if __name__ == '__main__':
-
     main()
