@@ -13,7 +13,9 @@ from sensor_msgs.msg import JointState
 
 # ── 速度上限 ────────────────────────────────────────────────
 MAX_LIN_VEL = 0.15
+MIN_LIN_VEL = -0.15
 MAX_ANG_VEL = 4.5
+MIN_ANG_VEL = -4.5
 
 # ── 手臂角度範圍 (度) ───────────────────────────────────────
 MAX_J1 = 90;  MIN_J1 = 0
@@ -87,6 +89,12 @@ class AICAR_TELEOP(Node):
         2. 印出 '[ ARM ] init : j1=..., j2=..., tool=...'
         3. 設定 get_arm_data = True
         """
+        if not self.get_arm_data:
+            self.j1 = int(msg.position[4] * 180 / math.pi)
+            self.j2 = int(msg.position[5] * 180 / math.pi)
+            self.tool = int(msg.position[6] * 180 / math.pi)
+            self.get_logger().info(f'[ ARM ] init : j1={self.j1}, j2={self.j2}, tool={self.tool}')
+            self.get_arm_data = True
         pass
 
     def cb_reset(self, msg):
@@ -95,6 +103,9 @@ class AICAR_TELEOP(Node):
         1. 印出 '[ SET ] TELEOP reset'
         2. 將 j1, j2, tool, lin_vel, ang_vel 全部歸零。
         """
+        self.get_logger().info('[ SET ] TELEOP reset')
+        self.lin_vel = self.ang_vel = 0.0
+        self.j1 = self.j2 = self.tool = 0
         pass
 
     # ── 功能函式 ────────────────────────────────────────────
@@ -166,19 +177,19 @@ class AICAR_TELEOP(Node):
                 # print(key)
 
                 if key == 'w':
-                    self.lin_vel = constrain(self.lin_vel + STEP_LIN, MAX_LIN_VEL, -MAX_LIN_VEL)
+                    self.lin_vel = constrain(self.lin_vel + STEP_LIN, MAX_LIN_VEL, MIN_LIN_VEL)
                     self.fn_wheel_pub()
 
                 elif key == 'x':
-                    self.lin_vel = constrain(self.lin_vel - STEP_LIN, MAX_LIN_VEL, -MAX_LIN_VEL)
+                    self.lin_vel = constrain(self.lin_vel - STEP_LIN, MAX_LIN_VEL, MIN_LIN_VEL)
                     self.fn_wheel_pub()
 
                 elif key == 'a':
-                    self.ang_vel = constrain(self.ang_vel + STEP_ANG, MAX_ANG_VEL, -MAX_ANG_VEL)
+                    self.ang_vel = constrain(self.ang_vel + STEP_ANG, MAX_ANG_VEL, MIN_ANG_VEL)
                     self.fn_wheel_pub()
 
                 elif key == 'd':
-                    self.ang_vel = constrain(self.ang_vel - STEP_ANG, MAX_ANG_VEL, -MAX_ANG_VEL)
+                    self.ang_vel = constrain(self.ang_vel - STEP_ANG, MAX_ANG_VEL, MIN_ANG_VEL)
                     self.fn_wheel_pub()
 
                 elif key == 's':
