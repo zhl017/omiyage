@@ -26,6 +26,22 @@ def constrain(vel):
     if vel > LIMIT_VEL: return LIMIT_VEL
     return vel
 
+def calc_diff(current, last, total, threshold=2*XM_TICK2RAD):
+    """
+    計算 dxl 的差分與累計值
+    current: 當前讀取值
+    last: 上一次讀取值
+    total: 累計角度
+    threshold: 小於此閾值視為 0（抖動過濾）
+    返回: diff, 更新後的 last, 更新後的 total
+    """
+    diff = (current - last) * XM_TICK2RAD
+    if abs(diff) <= threshold:
+        diff = 0.0
+    total += diff
+    last = current
+    return diff, last, total
+
 class AICAR_BASE(Node):
     def __init__(self):
         super().__init__('aicar_base')
@@ -120,6 +136,13 @@ class AICAR_BASE(Node):
         """
 
         self.get_logger().info('[ SET ] AICAR reset')
+
+        self.last_left         = self.last_right         = 0
+        self.last_rear_left    = self.last_rear_right    = 0
+        self.total_left        = self.total_right        = 0
+        self.total_rear_left   = self.total_rear_right   = 0
+        
+        self.state_is_reset = False
         self.reset_received = True
 
         pass
@@ -216,6 +239,23 @@ class AICAR_BASE(Node):
         8. 若 torque_received→ 執行 arm.set_torque()  並清旗標
         """
 
+        self.fn_update_states()
+        self.joint_states.header.stamp = self.get_clock().now().to_msg()
+        self.joint_states.position = [
+            self.total_left,
+            self.total_right,
+            self.total_rear_left,
+            self.total_rear_right,
+            self.arm_states[0],
+            self.arm_states[1],
+            self.arm_states[2],
+        ]
+        self.joint_states_pub.publish(self.joint_states)
+
+        diff_rad = Float32MultiArray()
+        diff_rad.data = [self.diff_left, self.diff_right]
+        self.diff_rad_pub.publish(diff_rad)
+
         if self.tool_received:
             self.arm.set_tool(self.tool_data)
             self.tool_received = False
@@ -267,6 +307,32 @@ class AICAR_BASE(Node):
                total += diff
                更新 last
         """
+        self.arm_states = self.arm.get_arm()
+        self.wheel_states = self.wheel.get_wheel()
+
+        if not self.state_is_reset:
+            self.last_left         = self.wheel_states[0]
+            self.last_right         = self.wheel_states[1]
+            self.last_rear_left    = self.wheel_states[2]
+            self.last_rear_right    = self.wheel_states[3]
+            self.state_is_reset = True
+
+        self.diff_left, self.last_left, self.total_left = calc_diff(self.wheel_states[0],
+                                                                    self.last_left,
+                                                                    self.total_left)
+        
+        self.diff_right, self.last_right, self.total_right = calc_diff(self.wheel_states[1],
+                                                                       self.last_right,
+                                                                       self.total_right)
+            
+        self.diff_rear_left, self.last_rear_left, self.total_rear_left = calc_diff(self.wheel_states[2],
+                                                                                   self.last_rear_left,
+                                                                                   self.total_rear_left)
+        
+        self.diff_rear_right, self.last_rear_right, self.total_rear_right = calc_diff(self.wheel_states[3],
+                                                                                      self.last_rear_right,
+                                                                                      self.total_rear_right)
+
         pass
 
     def fn_shutdown(self):
