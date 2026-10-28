@@ -85,7 +85,7 @@ class AICAR_BASE(Node):
         #   /joint_states  (JointState)         queue=1
         #   /diff_rad      (Float32MultiArray)  queue=1
         self.joint_states_pub = self.create_publisher(JointState, '/joint_states', 1)
-        self.diff_rad_pub     = self.create_publisher(Float32MultiArray, '/diff_rad', 1)
+        self.diff_rad_pub     = self.create_publisher(Float32MultiArray, '/diff_rad', 10)
 
         # --- JointState 初始化 ---
         self.joint_states = JointState()
